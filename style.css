@@ -69,6 +69,13 @@ body {
     margin: 0 auto;
     padding: 0 20px;
 }
+.carousel-slide {
+  display: none;
+}
+
+.carousel-slide.active {
+  display: block;
+}
 
 /* Typography */
 h1, h2, h3, h4 {
@@ -1377,4 +1384,5 @@ footer {
     .mindset-grid {
         grid-template-columns: 1fr;
     }
+
 }
