@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MFS Portfolio | Mark Florence Sabinator - IT Student</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+     /* Custom styles */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+    color: #333333;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Active section highlighting */
+.section {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.section.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Active nav link */
+.nav-link.active {
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+.nav-link.active:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background-color: #3b82f6;
+}
+
+/* Skill bars */
+.skill-progress {
+    height: 8px;
+    background-color: #3b82f6;
+    border-radius: 4px;
+    width: 0;
+    transition: width 1.5s ease-in-out;
+}
+
+/* REMOVED OLD CAROUSEL STYLES - Keep the new ones below */
+
+/* Timeline */
+.timeline-item {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 40px;
+}
+
+.timeline-item:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #3b82f6;
+    border: 2px solid #f0f5ff;
+}
+
+.timeline-item:after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 20px;
+    width: 2px;
+    height: calc(100% + 20px);
+    background-color: #e5e7eb;
+}
+
+.timeline-item:last-child:after {
+    display: none;
+}
+
+/* Section title underline */
+.section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.section-title:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 60px;
+    height: 3px;
+    background-color: #3b82f6;
+    border-radius: 2px;
+}
+
+/* Image hover effects */
+.profile-image img {
+    transition: transform 0.5s ease;
+}
+
+.profile-image:hover img {
+    transform: scale(1.03);
+}
+
+/* Button hover effects */
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* Subtle box shadows */
+.shadow-subtle {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-medium {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Card hover effect */
+.card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon colors */
+.icon-blue {
+    color: #3b82f6;
+}
+
+.icon-gray {
+    color: #6b7280;
+}
+
+/* UPDATED CAROUSEL STYLES - Use these instead */
+.carousel-container {
+    min-height: 500px; /* Fixed height for the container */
+    overflow: hidden;
+}
+
+.carousel {
+    position: relative;
+    height: 500px; /* Fixed height */
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+    transform: translateX(100%);
+}
+
+.carousel-slide.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+    z-index: 2;
+}
+
+.carousel-slide.prev {
+    transform: translateX(-100%);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.carousel-slide.next {
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.carousel-slide:not(.active) {
+    pointer-events: none;
+}
+
+.carousel-indicators {
+    z-index: 3;
+    position: relative;
+}
+
+.carousel-indicators .indicator {
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    outline: none;
+}
+
+.carousel-indicators .indicator:hover {
+    transform: scale(1.2);
+}
+
+.carousel-indicators .indicator.active {
+    background-color: #3b82f6 !important;
+}
+
+.carousel-btn {
+    z-index: 3;
+    position: relative;
+}
+
+/* Mobile responsiveness for carousel */
+@media (max-width: 768px) {
+    .carousel-container {
+        min-height: 600px;
+    }
+    
+    .carousel {
+        height: 600px;
+    }
+    
+    .carousel-slide {
+        flex-direction: column;
+    }
+    
+    .carousel-slide .lg\\:w-1\\/2 {
+        width: 100% !important;
+        height: 250px !important;
+    }
+}
+
+/* Ensure all slides have the same height */
+.carousel-slide > .flex {
+    height: 100%;
+}
+
+/* Fade animation for carousel */
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateX(30px);
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(0);
+    }
+}
+
+.carousel-slide.active {
+    animation: fadeIn 0.5s ease forwards;
+}
+    </style>
+</head>
+<body class="bg-white">
+
+    <header class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-subtle">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+                <div class="logo mb-4 md:mb-0">
+                    <h1 class="text-2xl md:text-3xl font-bold text-gray-900">My <span class="text-blue-600">Portfolio</span></h1>
+                    <p class="text-gray-600 mt-1 text-sm">Mark Florence Sabinator | IT Student</p>
+                </div>
+                <div class="datetime text-gray-700 font-medium text-sm">
+                    <span id="current-date" class="mr-4"></span>
+                    <span id="current-time"></span>
+                </div>
+            </div>
+            <nav class="mt-2">
+                <ul class="flex flex-wrap justify-center space-x-1 md:space-x-4">
+                    <li><a href="#home" class="nav-link active relative px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 transition duration-200"><i class="fas fa-home mr-1"></i>Home</a></li>
+                    <li><a href="#about" class="nav-link relative px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 transition duration-200"><i class="fas fa-user mr-1"></i>About</a></li>
+                    <li><a href="#education" class="nav-link relative px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 transition duration-200"><i class="fas fa-graduation-cap mr-1"></i>Education</a></li>
+                    <li><a href="#skills" class="nav-link relative px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 transition duration-200"><i class="fas fa-code mr-1"></i>Skills</a></li>
+                    <li><a href="#portfolio" class="nav-link relative px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 transition duration-200"><i class="fas fa-briefcase mr-1"></i>Portfolio</a></li>
+                    <li><a href="#contact" class="nav-link relative px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 transition duration-200"><i class="fas fa-envelope mr-1"></i>Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="py-8">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col lg:flex-row items-center lg:items-start gap-8">
+                    <div class="profile-image lg:w-2/5 flex justify-center">
+                        <div class="image-wrapper w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-medium">
+                            <img src="pictures/mahface.jpg" alt="Mark Florence Sabinator Profile Picture" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                    <div class="home-text lg:w-3/5 text-center lg:text-left">
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Sabinator in your Area!</h2>
+                        <h3 class="text-xl md:text-2xl text-blue-600 font-semibold mb-6">Information Technology Student at VSU-Alangalang</h3>
+                        <p class="text-gray-700 mb-6 leading-relaxed">A dedicated Information Technology student equipped with hands-on experience acquired through academic projects and practical training. Possesses a solid foundation in developing secure web applications using the Laravel framework, managing and optimizing MySQL and PostgreSQL databases.</p>
+                        <div class="contact-info-quick bg-gray-50 rounded-lg p-5 mb-6 shadow-subtle border border-gray-100">
+                            <p class="text-gray-700 mb-2"><i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>Brgy. Macanip Jaro, Leyte</p>
+                            <p class="text-gray-700 mb-2"><i class="fas fa-phone text-blue-500 mr-2"></i>(+63) 9384455734</p>
+                            <p class="text-gray-700"><i class="fas fa-envelope text-blue-500 mr-2"></i>macsabinator@gmail.com | a23-1-00574@vsu.edu.ph</p>
+                        </div>
+                        <a href="https://mail.google.com/mail/?view=cm&to=macsabinator@gmail.com" target="_blank" class="btn inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg shadow-subtle">
+                            <i class="fas fa-envelope mr-2"></i>Get In Touch
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="container mx-auto px-4 py-12">
+                <h2 class="section-title text-3xl font-bold text-gray-900 mb-8">Career Objective</h2>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="about-text lg:w-2/3">
+                        <div class="objective-box bg-gray-50 rounded-lg p-6 mb-8 shadow-subtle border border-gray-100">
+                            <p class="text-gray-700 leading-relaxed">A dedicated and tech-savvy professional seeking a Virtual Assistant role, equipped with hands-on experience acquired through academic projects and practical training. Possesses a solid foundation in digital organization, technical support, and efficient task management. Experienced in supporting web applications, managing database operations, and applying modern communication practices. Seeking to apply this technical knowledge and organizational skills to provide comprehensive administrative support, improve operational efficiency, and contribute to organizational success through reliable virtual assistance.</p>
+                        </div>
+                        
+                       <div class="student-mindset">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">My IT Career Objectives:</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="mindset-item bg-white rounded-lg p-5 shadow-subtle border border-gray-100 card-hover">
+                                    <i class="fas fa-shield-alt text-blue-500 text-2xl mb-3"></i>
+                                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Secure Backend Development</h4>
+                                    <p class="text-gray-700">Designing and implementing robust, secure backend systems with Laravel and modern cryptographic practices.</p>
+                                </div>
+                                <div class="mindset-item bg-white rounded-lg p-5 shadow-subtle border border-gray-100 card-hover">
+                                    <i class="fas fa-database text-blue-500 text-2xl mb-3"></i>
+                                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Database Architecture & Optimization</h4>
+                                    <p class="text-gray-700">Structuring, managing, and fine-tuning MySQL and PostgreSQL databases for performance, integrity, and scalability.</p>
+                                </div>
+                                <div class="mindset-item bg-white rounded-lg p-5 shadow-subtle border border-gray-100 card-hover">
+                                    <i class="fas fa-code text-blue-500 text-2xl mb-3"></i>
+                                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Full-Stack Proficiency</h4>
+                                    <p class="text-gray-700">Bridging frontend usability with backend logic to build complete, functional, and secure web applications.</p>
+                                </div>
+                                <div class="mindset-item bg-white rounded-lg p-5 shadow-subtle border border-gray-100 card-hover">
+                                    <i class="fas fa-user-secret text-blue-500 text-2xl mb-3"></i>
+                                    <h4 class="text-xl font-semibold text-gray-900 mb-2">Applied Cryptography</h4>
+                                    <p class="text-gray-700">Integrating modern encryption standards like AEAD schemes to ensure data confidentiality and integrity in applications.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="achievement-highlights lg:w-1/3">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Languages Spoken</h3>
+                        <div class="achievement-box bg-white rounded-lg p-5 shadow-subtle border border-gray-100 mb-8">
+                            <div class="achievement-item mb-5 pb-5 border-b border-gray-200">
+                                <div class="achievement-header flex items-center mb-2">
+                                    <i class="fas fa-language text-blue-500 text-xl mr-3"></i>
+                                    <h4 class="text-lg font-semibold text-gray-900">Dialect</h4>
+                                </div>
+                                <p class="text-gray-700"><strong>Waray-waray</strong> - Native speaker</p>
+                            </div>
+                            
+                            <div class="achievement-item mb-5 pb-5 border-b border-gray-200">
+                                <div class="achievement-header flex items-center mb-2">
+                                    <i class="fas fa-language text-blue-500 text-xl mr-3"></i>
+                                    <h4 class="text-lg font-semibold text-gray-900">Tagalog</h4>
+                                </div>
+                                <p class="text-gray-700">Proficient in speaking and understanding</p>
+                            </div>
+                            
+                            <div class="achievement-item">
+                                <div class="achievement-header flex items-center mb-2">
+                                    <i class="fas fa-language text-blue-500 text-xl mr-3"></i>
+                                    <h4 class="text-lg font-semibold text-gray-900">English</h4>
+                                </div>
+                                <p class="text-gray-700">Proficient in written and spoken English for professional communication</p>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-facts bg-white rounded-lg p-5 shadow-subtle border border-gray-100">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-6">Quick Facts</h3>
+                            <div class="space-y-4">
+                                <div class="fact-item flex items-center">
+                                    <i class="fas fa-university text-blue-500 text-xl mr-3"></i>
+                                    <p class="text-gray-700">Visayas State University - Alangalang</p>
+                                </div>
+                                <div class="fact-item flex items-center">
+                                    <i class="fas fa-graduation-cap text-blue-500 text-xl mr-3"></i>
+                                    <p class="text-gray-700">BS in Information Technology Undergraduate</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="section">
+            <div class="container mx-auto px-4 py-12">
+                <h2 class="section-title text-3xl font-bold text-gray-900 mb-8">Educational Background</h2>
+                
+                <div class="timeline max-w-3xl mx-auto">
+                    <div class="timeline-item">
+                        <div class="timeline-date text-blue-600 font-bold text-lg mb-2">Present</div>
+                        <div class="timeline-content bg-white rounded-lg p-6 shadow-subtle border border-gray-100">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Bachelor of Science in Information Technology (Undergraduate)</h3>
+                            <h4 class="text-lg text-blue-600 font-semibold mb-4">Visayas State University – Alangalang</h4>
+                            <ul class="text-gray-700 space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                    <span>Currently pursuing degree in Information Technology</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                    <span>Participating in various IT projects and activities</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date text-blue-600 font-bold text-lg mb-2">Senior High School</div>
+                        <div class="timeline-content bg-white rounded-lg p-6 shadow-subtle border border-gray-100">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">ICT-TVL Strand</h3>
+                            <h4 class="text-lg text-blue-600 font-semibold mb-4">Granja-Kalinawan National high School</h4>
+                            <ul class="text-gray-700 space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                    <span>Completed Senior High School with Information and Communication Technology strand</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                    <span>Developed foundational knowledge in Technologies</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date text-blue-600 font-bold text-lg mb-2">Junior High School</div>
+                        <div class="timeline-content bg-white rounded-lg p-6 shadow-subtle border border-gray-100">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Junior High School Graduate</h3>
+                            <h4 class="text-lg text-blue-600 font-semibold mb-4">Granja-Kalinawan National high School</h4>
+                            <ul class="text-gray-700 space-y-2">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                    <span>Completed basic education</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-green-500 mr-2 mt-1"></i>
+                                    <span>Participated in school events and extracurricular activities</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="section">
+            <div class="container mx-auto px-4 py-12">
+                <h2 class="section-title text-3xl font-bold text-gray-900 mb-4">Skills and Qualifications</h2>
+                <p class="text-gray-600 text-lg mb-8">Practical skills developed through academic projects and focused training</p>
+                
+                <div class="skills-intro bg-gray-50 rounded-lg p-6 mb-8 shadow-subtle border border-gray-100">
+                    <p class="text-gray-700 text-lg leading-relaxed">I focus on building practical, market-relevant skills through hands-on projects and coursework. Below are my core technical competencies and professional attributes.</p>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <div class="skill-category">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Core Technical Skills</h3>
+                        <div class="skill-item mb-6">
+                            <div class="skill-info flex justify-between mb-2">
+                                <span class="font-medium text-gray-900">Web Development (PHP / Laravel)</span>
+                                <span class="text-blue-600 font-semibold">Skillful</span>
+                            </div>
+                            <div class="skill-bar h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="skill-progress" data-level="85"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item mb-6">
+                            <div class="skill-info flex justify-between mb-2">
+                                <span class="font-medium text-gray-900">Database Management & Administration (MySQL & PostgreSQL)</span>
+                                <span class="text-blue-600 font-semibold">Skillful</span>
+                            </div>
+                            <div class="skill-bar h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="skill-progress" data-level="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item mb-6">
+                            <div class="skill-info flex justify-between mb-2">
+                                <span class="font-medium text-gray-900">Computer & Laptop Hardware Repair</span>
+                                <span class="text-blue-600 font-semibold">Skillful</span>
+                            </div>
+                            <div class="skill-bar h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="skill-progress" data-level="80"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item mb-6">
+                            <div class="skill-info flex justify-between mb-2">
+                                <span class="font-medium text-gray-900">Security Testing & Modern Cryptography</span>
+                                <span class="text-blue-600 font-semibold">Intermediate</span>
+                            </div>
+                            <div class="skill-bar h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="skill-progress" data-level="65"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Professional Attributes</h3>
+                        <div class="skill-item mb-6">
+                            <div class="skill-info flex justify-between mb-2">
+                                <span class="font-medium text-gray-900">Initiative & Proactive Problem-Solving</span>
+                                <span class="text-blue-600 font-semibold">Advanced</span>
+                            </div>
+                            <div class="skill-bar h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="skill-progress" data-level="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item mb-6">
+                            <div class="skill-info flex justify-between mb-2">
+                                <span class="font-medium text-gray-900">Adaptability & Flexibility</span>
+                                <span class="text-blue-600 font-semibold">Advanced</span>
+                            </div>
+                            <div class="skill-bar h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="skill-progress" data-level="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item mb-6">
+                            <div class="skill-info flex justify-between mb-2">
+                                <span class="font-medium text-gray-900">Positive & Collaborative Attitude</span>
+                                <span class="text-blue-600 font-semibold">Advanced</span>
+                            </div>
+                            <div class="skill-bar h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="skill-progress" data-level="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item mb-6">
+                            <div class="skill-info flex justify-between mb-2">
+                                <span class="font-medium text-gray-900">Analytical & Detail-Oriented</span>
+                                <span class="text-blue-600 font-semibold">Skillful</span>
+                            </div>
+                            <div class="skill-bar h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="skill-progress" data-level="80"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="skills-note bg-blue-50 rounded-lg p-6 shadow-subtle border border-blue-100">
+                    <h4 class="text-xl font-bold text-gray-900 mb-3">Note About My Skills:</h4>
+                    <p class="text-gray-700">These skills are cultivated through hands-on academic projects and practical training. I am committed to continuous learning and applying these competencies to build secure, efficient, and scalable technological solutions.</p>
+                </div>
+            </div>
+        </section>
+<!-- Portfolio Section -->
+<section id="portfolio" class="section">
+    <div class="container mx-auto px-4 py-12">
+        <h2 class="section-title text-3xl font-bold text-gray-900 mb-8">Portfolio and Recognition</h2>
+        
+        <div class="carousel-container bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="carousel">
+                <!-- Slide 1 -->
+                <div class="carousel-slide active">
+                    <div class="flex flex-col lg:flex-row h-full">
+                        <div class="lg:w-1/2 h-72 lg:h-full">
+                            <img src="pictures/grading_portal.jpg" alt="Student Grading Portal Project" class="w-full h-full object-cover">
+                        </div>
+                        <div class="carousel-caption lg:w-1/2 p-6 lg:p-8 flex flex-col justify-center">
+                            <div class="mb-4">
+                                <i class="fas fa-code text-3xl text-blue-500"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Student Grading Portal Development</h3>
+                            <h4 class="text-lg text-blue-600 font-semibold mb-4">Team Web Application Project</h4>
+                            <p class="text-gray-700 leading-relaxed">Collaborated with a development team to design, develop, and deploy a functional Student Grading Portal using modern web technologies and secure database practices.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 2 -->
+                <div class="carousel-slide">
+                    <div class="flex flex-col lg:flex-row h-full">
+                        <div class="lg:w-1/2 h-72 lg:h-full">
+                            <img src="pictures/CyberDefense.png" alt="Cyber Warriors Competition" class="w-full h-full object-cover">
+                        </div>
+                        <div class="carousel-caption lg:w-1/2 p-6 lg:p-8 flex flex-col justify-center">
+                            <div class="mb-4">
+                                <i class="fas fa-award text-3xl text-blue-500"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Regional Champion & National Qualifier</h3>
+                            <h4 class="text-lg text-blue-600 font-semibold mb-2">VSU Alangalang Cyber Warriors - TRON 2026 Philippine Army Cyber Defense Exercise</h4>
+                            <p class="text-gray-500 text-sm mb-4">2026</p>
+                            <p class="text-gray-700 leading-relaxed">Led team as regional champions in cyber defense competition, qualifying for national-level Philippine Army Cyber Defense Exercise. Demonstrated expertise in security testing, network defense, and cryptographic applications.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 3 -->
+                <div class="carousel-slide">
+                    <div class="flex flex-col lg:flex-row h-full">
+                        <div class="lg:w-1/2 h-72 lg:h-full">
+                            <img src="pictures/pageant.jpg" alt="Mr. IT Pageant Winner" class="w-full h-full object-cover">
+                        </div>
+                        <div class="carousel-caption lg:w-1/2 p-6 lg:p-8 flex flex-col justify-center">
+                            <div class="mb-4">
+                                <i class="fas fa-crown text-3xl text-blue-500"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Mr. IT 2025</h3>
+                            <h4 class="text-lg text-blue-600 font-semibold mb-4">Department Pageant Winner</h4>
+                            <p class="text-gray-700 leading-relaxed">Awarded the title of "Mr. IT" in the annual Information Technology department pageant, recognized for leadership, presentation skills, and representation of IT student values.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 4 -->
+                <div class="carousel-slide">
+                    <div class="flex flex-col lg:flex-row h-full">
+                        <div class="lg:w-1/2 h-72 lg:h-full">
+                            <img src="pictures/honor.jpg" alt="College Honors Certificate" class="w-full h-full object-cover">
+                        </div>
+                        <div class="carousel-caption lg:w-1/2 p-6 lg:p-8 flex flex-col justify-center">
+                            <div class="mb-4">
+                                <i class="fas fa-graduation-cap text-3xl text-blue-500"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">College Honors</h3>
+                            <h4 class="text-lg text-blue-600 font-semibold mb-4">Consistent Academic Excellence</h4>
+                            <p class="text-gray-700 leading-relaxed">• College Honor - 2nd Semester, A.Y. 2023-2024<br>
+                            • College Honor - 1st Semester, A.Y. 2024-2025<br>
+                            Recognized for maintaining academic distinction while engaging in practical IT projects and extracurricular activities.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Slide 5 -->
+                <div class="carousel-slide">
+                    <div class="flex flex-col lg:flex-row h-full">
+                        <div class="lg:w-1/2 h-72 lg:h-full">
+                            <img src="pictures/evsu-dabest.jpg" alt="DABEST Conference" class="w-full h-full object-cover">
+                        </div>
+                        <div class="carousel-caption lg:w-1/2 p-6 lg:p-8 flex flex-col justify-center">
+                            <div class="mb-4">
+                                <i class="fas fa-file-alt text-3xl text-blue-500"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">3rd DABEST Student Research Development Congress</h3>
+                            <h4 class="text-lg text-blue-600 font-semibold mb-2">Conference</h4>
+                            <p class="text-gray-500 text-sm mb-4">2024</p>
+                            <p class="text-gray-700 leading-relaxed">Presented a Research Paper entitled "Development of Prevention Framework for Enhancing Student Academic Records in Visayas State University Alangalang".</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="carousel-controls flex items-center justify-between p-4 bg-gray-50 border-t border-gray-100">
+                <button class="carousel-btn prev-btn bg-white border border-gray-300 text-gray-700 p-3 rounded-full hover:bg-gray-50 hover:border-blue-500 hover:text-blue-500 transition duration-200" aria-label="Previous slide">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="carousel-indicators flex space-x-2">
+                    <button class="indicator active w-3 h-3 rounded-full bg-blue-500 transition duration-300" data-slide="0" aria-label="Go to slide 1"></button>
+                    <button class="indicator w-3 h-3 rounded-full bg-gray-300 hover:bg-blue-400 transition duration-300" data-slide="1" aria-label="Go to slide 2"></button>
+                    <button class="indicator w-3 h-3 rounded-full bg-gray-300 hover:bg-blue-400 transition duration-300" data-slide="2" aria-label="Go to slide 3"></button>
+                    <button class="indicator w-3 h-3 rounded-full bg-gray-300 hover:bg-blue-400 transition duration-300" data-slide="3" aria-label="Go to slide 4"></button>
+                    <button class="indicator w-3 h-3 rounded-full bg-gray-300 hover:bg-blue-400 transition duration-300" data-slide="4" aria-label="Go to slide 5"></button>
+                </div>
+                <button class="carousel-btn next-btn bg-white border border-gray-300 text-gray-700 p-3 rounded-full hover:bg-gray-50 hover:border-blue-500 hover:text-blue-500 transition duration-200" aria-label="Next slide">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="container mx-auto px-4 py-12">
+                <h2 class="section-title text-3xl font-bold text-gray-900 mb-8">Get In Touch</h2>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="contact-info lg:w-1/2 bg-white rounded-lg p-8 shadow-subtle border border-gray-100">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Contact Information</h3>
+                        <p class="text-gray-700 mb-8">I welcome opportunities to discuss IT projects, security solutions, or potential collaborations.</p>
+                        <div class="contact-details space-y-6 mb-8">
+                            <div class="contact-item flex items-start">
+                                <i class="fas fa-user text-blue-500 text-xl mr-4 mt-1"></i>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-1">Name</h4>
+                                    <p class="text-gray-700">Mark Florence Sabinator</p>
+                                </div>
+                            </div>
+                            <div class="contact-item flex items-start">
+                                <i class="fas fa-map-marker-alt text-blue-500 text-xl mr-4 mt-1"></i>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-1">Address</h4>
+                                    <p class="text-gray-700">Brgy. Macanip, Jaro, Leyte, Zone 1, 6527 Jaro</p>
+                                </div>
+                            </div>
+                            <div class="contact-item flex items-start">
+                                <i class="fas fa-phone text-blue-500 text-xl mr-4 mt-1"></i>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-1">Phone</h4>
+                                    <p class="text-gray-700">09946881369</p>
+                                </div>
+                            </div>
+                            <div class="contact-item flex items-start">
+                                <i class="fas fa-envelope text-blue-500 text-xl mr-4 mt-1"></i>
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-1">Email</h4>
+                                    <p class="text-gray-700">macsabinator@gmail.com</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="social-links flex space-x-4">
+                            <a href="tel:09946881369" title="Call" class="bg-gray-100 text-gray-700 p-3 rounded-full hover:bg-blue-50 hover:text-blue-600 transition duration-200 border border-gray-200">
+                                <i class="fas fa-phone"></i>
+                            </a>
+                            <a href="https://mail.google.com/mail/?view=cm&to=macsabinator@gmail.com" target="_blank" title="Email" class="bg-gray-100 text-gray-700 p-3 rounded-full hover:bg-blue-50 hover:text-blue-600 transition duration-200 border border-gray-200">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <a href="https://www.facebook.com/markflorence.sabinator.9" title="Facebook" class="bg-gray-100 text-gray-700 p-3 rounded-full hover:bg-blue-50 hover:text-blue-600 transition duration-200 border border-gray-200">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="footer-logo mb-6 md:mb-0">
+                    <h2 class="text-xl font-bold text-gray-900 mb-2">Mark Florence Sabinator</h2>
+                    <p class="text-gray-600 text-sm">Information Technology Student | VSU-Alangalang</p>
+                </div>
+                <div class="copyright text-center md:text-right">
+                    <p class="text-gray-600 text-sm">&copy; <span id="current-year"></span> My Portfolio. All rights reserved.</p>
+                    <p class="text-gray-500 text-xs mt-1">BS Information Technology Undergraduate | Visayas State University - Alangalang</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
