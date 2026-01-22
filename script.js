@@ -10,28 +10,26 @@ function initCarousel() {
     let currentSlide = 0;
     const totalSlides = slides.length;
     
-    function showSlide(index) {
-        // Remove active class from all slides and indicators
-        slides.forEach(slide => {
-            slide.classList.remove('active');
-        });
-        
-        indicators.forEach(indicator => {
-            indicator.classList.remove('active');
-            indicator.classList.remove('bg-blue-500');
-            indicator.classList.add('bg-gray-300');
-        });
-        
-        // Add active class to current slide
-        slides[index].classList.add('active');
-        
-        // Update indicator
-        indicators[index].classList.add('active');
-        indicators[index].classList.remove('bg-gray-300');
-        indicators[index].classList.add('bg-blue-500');
-        
-        currentSlide = index;
-    }
+function showSlide(index) {
+    slides.forEach(slide => {
+        slide.classList.add('hidden');
+        slide.classList.remove('active');
+    });
+
+    indicators.forEach(indicator => {
+        indicator.classList.remove('bg-blue-500');
+        indicator.classList.add('bg-gray-300');
+    });
+
+    slides[index].classList.remove('hidden');
+    slides[index].classList.add('active');
+
+    indicators[index].classList.remove('bg-gray-300');
+    indicators[index].classList.add('bg-blue-500');
+
+    currentSlide = index;
+}
+
     
     function nextSlide() {
         let nextIndex = (currentSlide + 1) % totalSlides;
@@ -132,3 +130,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
