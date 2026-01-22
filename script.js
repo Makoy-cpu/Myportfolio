@@ -64,10 +64,71 @@ function initCarousel() {
     showSlide(0);
 }
 
-// Add to your DOMContentLoaded function
+// Update your DOMContentLoaded function to ensure proper initialization order
 document.addEventListener('DOMContentLoaded', function() {
-    // ... your existing code ...
+    initNavigation();
+    initSkillAnimations();
+    initFormSubmission();
+    
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+    
+    // Update date and time display
+    function updateDateTime() {
+        const now = new Date();
+        const currentDate = now.toLocaleDateString('en-US', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+        const currentTime = now.toLocaleTimeString('en-US', { 
+            hour12: true, 
+            hour: '2-digit', 
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        
+        const dateElement = document.getElementById('current-date');
+        const timeElement = document.getElementById('current-time');
+        
+        if (dateElement) dateElement.textContent = currentDate;
+        if (timeElement) timeElement.textContent = currentTime;
+    }
+    
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+    
+    // Initialize Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+            }
+        });
+    }, observerOptions);
+
+    const elementsToAnimate = document.querySelectorAll('.mindset-item, .portfolio-item, .timeline-content');
+    elementsToAnimate.forEach(element => {
+        observer.observe(element);
+    });
     
     // Initialize carousel
-    setTimeout(initCarousel, 100);
+    setTimeout(() => {
+        initCarousel();
+    }, 500); // Small delay to ensure DOM is fully rendered
+    
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+        const header = document.querySelector('header');
+        if (window.scrollY > 50) {
+            header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+        } else {
+            header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.05)';
+        }
+    });
 });
